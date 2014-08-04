@@ -26,7 +26,15 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 				 const char *dev_name, void *data)
 {
-	return NULL;
+	struct dentry *retval;
+
+	retval = mount_bdev(fs_type, flags, dev_name, data, sufs_fill_super);
+	if (unlikely(IS_ERR(retval)))
+		pr_err("SuFS: Error mounting filesystem\n");
+	else
+		pr_info("SuFS: Mount successful on %s\n", dev_name);
+
+	return retval;
 }
 
 static void sufs_kill_superblock(struct super_block *sb)
