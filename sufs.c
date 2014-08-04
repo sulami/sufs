@@ -12,9 +12,22 @@
 
 #include "sufs.h"
 
+static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
+				 const char *dev_name, void *data)
+{
+	return NULL;
+}
+
+static void sufs_kill_superblock(struct super_block *sb)
+{
+	pr_info("SuFS: Superblock is dead, unmount successful\n");
+}
+
 struct file_system_type sufs_fs_type = {
 	.owner = THIS_MODULE,
 	.name = "sufs",
+	.mount = sufs_mount,
+	.kill_sb = sufs_kill_superblock,
 };
 
 static int sufs_init()
