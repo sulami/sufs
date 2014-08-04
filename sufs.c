@@ -45,6 +45,7 @@ static int sufs_init()
 		pr_err("SuFS: Failed to register filesystem: %d\n", retval);
 	else
 		pr_info("SuFS: Module loaded\n");
+
 	return 0;
 }
 
