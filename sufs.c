@@ -63,9 +63,7 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 {
 	struct inode *inode;
 
-	/* The incredible magic number */
-	sb->s_magic = 0x5c1a31;
-
+	sb->s_magic = SUFS_MAGIC_NR;
 	inode = sufs_get_inode(sb, NULL, S_IFDIR, 0);
 	inode->i_op = &sufs_inode_ops;
 	inode->i_fop = &sufs_dir_operations;

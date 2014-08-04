@@ -2,6 +2,9 @@
  * SuFS Header - Declarations and documentation
  */
 
+/* The very important magic number */
+#define SUFS_MAGIC_NR 0x5c1a31
+
 /*
  * sufs_iterate
  *
