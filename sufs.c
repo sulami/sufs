@@ -18,6 +18,11 @@ struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 	return NULL;
 }
 
+int sufs_fill_super(struct super_block *sb, void *data, int silent)
+{
+	return 0;
+}
+
 static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 				 const char *dev_name, void *data)
 {

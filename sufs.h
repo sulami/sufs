@@ -8,13 +8,25 @@
  * Create a new inode and return it for a given file (or directory, link, ...)
  *
  * TAKES:
- * struct super_block *sb	super block which manages the file
+ * struct super_block *sb	superblock which manages the file
  * const struct indoe *dir	directory under which the file is created
  * umode_t mode			type of file
  * dev_t dev			device to be used
  */
 struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 			     umode_t mode, dev_t dev);
+
+/*
+ * syfs_fill_super
+ *
+ * Fill the superblock with the information needed to be valid
+ *
+ * TAKES:
+ * struct super_block *sb	superblock to fill
+ * void *data			data?
+ * int silent			silent?
+ */
+int sufs_fill_super(struct super_block *sb, void *data, int silent);
 
 /*
  * sufs_mount
