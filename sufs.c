@@ -12,6 +12,26 @@
 
 #include "sufs.h"
 
+static int sufs_iterate(struct file *filp, struct dir_context *ctx)
+{
+	return 0;
+}
+
+const struct file_operations sufs_dir_operations = {
+	.owner = THIS_MODULE,
+	.iterate = sufs_iterate,
+};
+
+struct dentry *sufs_lookup(struct inode *parent_inode,
+			   struct dentry *child_dentry, unsigned int flags)
+{
+	return NULL;
+}
+
+static struct inode_operations sufs_inode_ops = {
+	.lookup = sufs_lookup,
+};
+
 struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 			     umode_t mode, dev_t dev)
 {
@@ -47,6 +67,8 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 	sb->s_magic = 0x5c1a31;
 
 	inode = sufs_get_inode(sb, NULL, S_IFDIR, 0);
+	inode->i_op = &sufs_inode_ops;
+	inode->i_fop = &sufs_dir_operations;
 	sb->s_root = d_make_root(inode);
 	if (!sb->s_root)
 		return -ENOMEM;

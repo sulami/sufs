@@ -3,6 +3,30 @@
  */
 
 /*
+ * sufs_iterate
+ *
+ * Implement the iterate file operation
+ *
+ * TAKES:
+ * struct file *filp		filepointer to use
+ * struct dir_context *ctx	context to use
+ */
+static int sufs_iterate(struct file *filp, struct dir_context *ctx);
+
+/*
+ * sufs_lookup
+ *
+ * Implement the lookup inode operation
+ *
+ * TAKES:
+ * struct inode *parent_inode	the parent inode
+ * struct dentry *child_dentry	the child dentry
+ * unsigned int flags		additional flags
+ */
+struct dentry *sufs_lookup(struct inode *parent_inode,
+			   struct dentry *child_dentry, unsigned int flags);
+
+/*
  * sufs_get_inode
  *
  * Create a new inode and return it for a given file (or directory, link, ...)
