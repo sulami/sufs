@@ -12,6 +12,12 @@
 
 #include "sufs.h"
 
+struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
+			     umode_t mode, dev_t dev)
+{
+	return NULL;
+}
+
 static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 				 const char *dev_name, void *data)
 {

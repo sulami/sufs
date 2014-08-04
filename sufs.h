@@ -3,6 +3,18 @@
  */
 
 /*
+ * sufs_get_inode
+ *
+ * create a new indoe and return it for a given file (or directory, link, ...)
+ *
+ * TAKES:
+ * struct super_block *sb	super block which manages the file
+ * const struct indoe *dir	directory under which the file is created
+ * umode_t mode			type of file
+ * dev_t dev			device to be used
+ */
+struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
+			     umode_t mode, dev_t dev);
 
 /*
  * sufs_mount
