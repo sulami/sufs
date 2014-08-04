@@ -15,7 +15,28 @@
 struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 			     umode_t mode, dev_t dev)
 {
-	return NULL;
+	struct inode *inode = new_inode(sb);
+	if (!inode)
+		goto fail;
+
+	inode->i_ino = get_next_ino();
+	inode_init_owner(inode, dir, mode);
+	inode->i_atime = inode->i_mtime = inode->i_ctime = CURRENT_TIME;
+
+	switch (mode & S_IFMT) {
+	case S_IFDIR:
+		inc_nlink(inode);
+		break;
+	case S_IFREG:
+	case S_IFLNK:
+	default:
+		pr_err("SuFS: This type of inode is not supported yet\n");
+		free_inode_nonrcu(inode);
+		break;
+	}
+
+fail:
+	return inode;
 }
 
 int sufs_fill_super(struct super_block *sb, void *data, int silent)
