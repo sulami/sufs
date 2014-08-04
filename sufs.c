@@ -20,6 +20,16 @@ struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 
 int sufs_fill_super(struct super_block *sb, void *data, int silent)
 {
+	struct inode *inode;
+
+	/* The incredible magic number */
+	sb->s_magic = 0x5c1a31;
+
+	inode = sufs_get_inode(sb, NULL, S_IFDIR, 0);
+	sb->s_root = d_make_root(inode);
+	if (!sb->s_root)
+		return -ENOMEM;
+
 	return 0;
 }
 
