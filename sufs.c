@@ -2,6 +2,8 @@
  * SuSF - The filesystem of a dystopian future
  *
  * Might do something, or does not
+ *
+ * See sufs.h for extensive documentation
  */
 
 #include <linux/init.h>
