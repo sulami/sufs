@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "mkfs-sufs.h"
+#include "sufs.h"
 
 int main(int argc, char *argv[])
 {

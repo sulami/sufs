@@ -1,9 +1,7 @@
 /*
  * SuSF - The filesystem of a dystopian future
  *
- * Might do something, or does not
- *
- * See sufs.h for extensive documentation
+ * Might do something, might not
  */
 
 #include <linux/init.h>
@@ -12,6 +10,15 @@
 
 #include "sufs.h"
 
+/*
+ * sufs_iterate
+ *
+ * Implement the iterate file operation
+ *
+ * TAKES:
+ * struct file *filp		filepointer to use
+ * struct dir_context *ctx	context to use
+ */
 static int sufs_iterate(struct file *filp, struct dir_context *ctx)
 {
 	return 0;
@@ -22,6 +29,16 @@ const struct file_operations sufs_dir_operations = {
 	.iterate = sufs_iterate,
 };
 
+/*
+ * sufs_lookup
+ *
+ * Implement the lookup inode operation
+ *
+ * TAKES:
+ * struct inode *parent_inode	the parent inode
+ * struct dentry *child_dentry	the child dentry
+ * unsigned int flags		additional flags
+ */
 struct dentry *sufs_lookup(struct inode *parent_inode,
 			   struct dentry *child_dentry, unsigned int flags)
 {
@@ -32,6 +49,17 @@ static struct inode_operations sufs_inode_ops = {
 	.lookup = sufs_lookup,
 };
 
+/*
+ * sufs_get_inode
+ *
+ * Create a new inode and return it for a given file (or directory, link, ...)
+ *
+ * TAKES:
+ * struct super_block *sb	superblock which manages the file
+ * const struct indoe *dir	directory under which the file is created
+ * umode_t mode			type of file
+ * dev_t dev			device to be used
+ */
 struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 			     umode_t mode, dev_t dev)
 {
@@ -59,6 +87,16 @@ fail:
 	return inode;
 }
 
+/*
+ * syfs_fill_super
+ *
+ * Fill the superblock with the information needed to be valid
+ *
+ * TAKES:
+ * struct super_block *sb	superblock to fill
+ * void *data			data?
+ * int silent			silent?
+ */
 int sufs_fill_super(struct super_block *sb, void *data, int silent)
 {
 	struct inode *inode;
@@ -74,6 +112,17 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 	return 0;
 }
 
+/*
+ * sufs_mount
+ *
+ * Mount a SuFS filesystem
+ *
+ * TAKES:
+ * struct file_system_type *fs_type	the filesystem tupe
+ * int flags				additional flags
+ * const_char *dev_name			the device name
+ * void *data				data?
+ */
 static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 				 const char *dev_name, void *data)
 {
@@ -88,6 +137,14 @@ static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 	return retval;
 }
 
+/*
+ * sufs_kill_superblock
+ *
+ * Kill the superblock and unmount the filesystem. Currently a dummy
+ *
+ * TAKES:
+ * struct super_block *sb	super block to kill
+ */
 static void sufs_kill_superblock(struct super_block *sb)
 {
 	pr_info("SuFS: Superblock is dead, unmount successful\n");
@@ -100,7 +157,7 @@ struct file_system_type sufs_fs_type = {
 	.kill_sb = sufs_kill_superblock,
 };
 
-static int sufs_init()
+static int sufs_init(void)
 {
 	int retval;
 
@@ -113,7 +170,7 @@ static int sufs_init()
 	return 0;
 }
 
-static void sufs_exit()
+static void sufs_exit(void)
 {
 	int retval;
 
