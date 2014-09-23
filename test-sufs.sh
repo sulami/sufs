@@ -10,6 +10,18 @@ then
     mkdir mnt
 fi
 
+# Test functions
+
+# Create a single directory
+function test_dir {
+    echo "Creating a directory"
+    mkdir mnt/toast
+    if [ ! -d mnt/toast ]
+    then
+        echo "TEST FAILED: Creating a directory"
+    fi
+}
+
 # Create new sufs
 echo "Creating test image"
 ./mkfs-sufs image
@@ -22,6 +34,7 @@ mount -o loop -t sufs image mnt
 
 # Run tests
 echo "Starting tests"
+test_dir
 echo "Tests finished"
 
 # Unmount the test image and unload the kernel module
