@@ -107,7 +107,8 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 	bh = (struct buffer_head *)sb_bread(sb, 0);
 	sb_disk = (struct sufs_super_block *)bh->b_data;
 
-	pr_info("SuFS: Magic number on disk is %d\n", sb_disk->magic);
+	if (!silent)
+		pr_info("SuFS: Magic number on disk is %d\n", sb_disk->magic);
 
 	if (unlikely(sb_disk->magic != SUFS_MAGIC_NR)) {
 		pr_err("SuFS: Filesystem does not seem to be SuFS\n");
@@ -120,8 +121,9 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 		return -EMEDIUMTYPE;
 	}
 
-	pr_info("SuFS: Filesystem detected, version %d, block size %d\n",
-		sb_disk->version, sb_disk->block_size);
+	if (!silent)
+		pr_info("SuFS: Filesystem detected, version %d, block size %d\n",
+			sb_disk->version, sb_disk->block_size);
 
 	sb->s_magic = SUFS_MAGIC_NR;
 	inode = sufs_get_inode(sb, NULL, S_IFDIR, 0);
