@@ -12,6 +12,12 @@
 #include "sufs.h"
 
 /*
+ * Debug print macros
+ */
+#define spr(level, fmt, ...)				\
+	printk(level "SuFS: " fmt "\n", ##__VA_ARGS__)	\
+
+/*
  * Locking
  */
 static DEFINE_MUTEX(sufs_file_lock);
@@ -105,7 +111,7 @@ struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 	case S_IFREG:
 	case S_IFLNK:
 	default:
-		pr_err("SuFS: This type of inode is not supported yet\n");
+		spr(KERN_ERR, "This type of inode is not supported yet");
 		free_inode_nonrcu(inode);
 		break;
 	}
@@ -129,22 +135,22 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 	sb_disk = (struct sufs_super_block *)bh->b_data;
 
 	if (!silent)
-		pr_info("SuFS: Magic number on disk is %d\n", sb_disk->magic);
+		spr(KERN_INFO, "Magic number on disk is %d", sb_disk->magic);
 
 	if (unlikely(sb_disk->magic != SUFS_MAGIC_NR)) {
-		pr_err("SuFS: Filesystem does not seem to be SuFS\n");
+		spr(KERN_ERR, "SuFS: Filesystem does not seem to be SuFS");
 		return -EMEDIUMTYPE;
 	}
 
 	if (unlikely(sb_disk->block_size != SUFS_DEFAULT_BLOCK_SIZE)) {
-		pr_err(
-		"SuFS: Filesystem seems to use non-standard block size\n");
+		spr(KERN_ERR,
+		    "Filesystem seems to use non-standard block size");
 		return -EMEDIUMTYPE;
 	}
 
 	if (!silent)
-		pr_info("SuFS: Filesystem detected, version %d, block size %d\n",
-			sb_disk->version, sb_disk->block_size);
+		spr(KERN_INFO, "Filesystem detected, version %d, block size %d",
+		    sb_disk->version, sb_disk->block_size);
 
 	sb->s_magic = SUFS_MAGIC_NR;
 	inode = sufs_get_inode(sb, NULL, S_IFDIR, 0);
@@ -169,9 +175,9 @@ static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 
 	retval = mount_bdev(fs_type, flags, dev_name, data, sufs_fill_super);
 	if (unlikely(IS_ERR(retval)))
-		pr_err("SuFS: Error mounting filesystem\n");
+		spr(KERN_ERR, "Error mounting filesystem");
 	else
-		pr_info("SuFS: Mount successful on %s\n", dev_name);
+		spr(KERN_INFO, "Mount successful on %s", dev_name);
 
 	return retval;
 }
@@ -183,7 +189,7 @@ static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
  */
 static void sufs_kill_superblock(struct super_block *sb)
 {
-	pr_info("SuFS: Superblock is dead, unmount successful\n");
+	spr(KERN_INFO, "Superblock is dead, unmount successful");
 }
 
 struct file_system_type sufs_fs_type = {
@@ -199,9 +205,9 @@ static int sufs_init(void)
 
 	retval = register_filesystem(&sufs_fs_type);
 	if (unlikely(retval))
-		pr_err("SuFS: Failed to register filesystem: %d\n", retval);
+		spr(KERN_ERR, "Failed to register filesystem: %d", retval);
 	else
-		pr_info("SuFS: Module loaded\n");
+		spr(KERN_INFO, "Module loaded");
 
 	return 0;
 }
@@ -212,9 +218,9 @@ static void sufs_exit(void)
 
 	retval = unregister_filesystem(&sufs_fs_type);
 	if (unlikely(retval))
-		pr_err("SuFS: Failed to unregister filesystem: %d\n", retval);
+		spr(KERN_ERR, "Failed to unregister filesystem: %d", retval);
 	else
-		pr_info("SuFS: Module unloaded\n");
+		spr(KERN_INFO, "Module unloaded");
 }
 
 module_init(sufs_init);
