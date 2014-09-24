@@ -37,6 +37,18 @@ const struct file_operations sufs_dir_operations = {
 	.iterate = sufs_iterate,
 };
 
+struct dentry *sufs_lookup(struct inode *parent_inode,
+			   struct dentry *child_dentry, unsigned int flags);
+static int sufs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
+		       bool excl);
+static int sufs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode);
+
+static struct inode_operations sufs_inode_ops = {
+	.create = sufs_create,
+	.lookup = sufs_lookup,
+	.mkdir = sufs_mkdir,
+};
+
 /*
  * sufs_create_fs_object
  *
@@ -81,12 +93,6 @@ static int sufs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
 {
 	return sufs_create_fs_object(dir, dentry, S_IFDIR | mode);
 }
-
-static struct inode_operations sufs_inode_ops = {
-	.create = sufs_create,
-	.lookup = sufs_lookup,
-	.mkdir = sufs_mkdir,
-};
 
 /*
  * sufs_get_inode
