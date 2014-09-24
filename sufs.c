@@ -12,6 +12,11 @@
 #include "sufs.h"
 
 /*
+ * Locking
+ */
+static DEFINE_MUTEX(sufs_file_lock);
+
+/*
  * sufs_iterate
  *
  * Implement the iterate file operation
@@ -29,6 +34,24 @@ const struct file_operations sufs_dir_operations = {
 	.owner = THIS_MODULE,
 	.iterate = sufs_iterate,
 };
+
+/*
+ * sufs_create_fs_object
+ *
+ * Create a filesystem object, to be called by the functions in sufs_inode_ops
+ *
+ * TAKES:
+ * struct inode *dir		the parent dir inode
+ * struct dentry *dentry	the dentry
+ * umode_t mode			the mode
+ */
+static int sufs_create_fs_object(struct inode *dir, struct dentry *dentry,
+				 umode_t mode)
+{
+	mutex_lock_interruptible(&sufs_file_lock);
+	mutex_unlock(&sufs_file_lock);
+	return 0;
+}
 
 /*
  * sufs_lookup
