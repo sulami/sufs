@@ -70,6 +70,22 @@ struct dentry *sufs_lookup(struct inode *parent_inode,
 }
 
 /*
+ * sufs_create
+ *
+ * Implement the create inode operation
+ *
+ * TAKES:
+ * struct inode *dir		the parent dir inode
+ * struct dentry *dentry	the dentry
+ * umode_t mode			the mode
+ */
+static int sufs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
+		       bool excl)
+{
+	return sufs_create_fs_object(dir, dentry, mode);
+}
+
+/*
  * sufs_mkdir
  *
  * Implement the mkdir inode operation
@@ -85,6 +101,7 @@ static int sufs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
 }
 
 static struct inode_operations sufs_inode_ops = {
+	.create = sufs_create,
 	.lookup = sufs_lookup,
 	.mkdir = sufs_mkdir,
 };
