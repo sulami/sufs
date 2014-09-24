@@ -20,10 +20,6 @@ static DEFINE_MUTEX(sufs_file_lock);
  * sufs_iterate
  *
  * Implement the iterate file operation
- *
- * TAKES:
- * struct file *filp		filepointer to use
- * struct dir_context *ctx	context to use
  */
 static int sufs_iterate(struct file *filp, struct dir_context *ctx)
 {
@@ -39,11 +35,6 @@ const struct file_operations sufs_dir_operations = {
  * sufs_create_fs_object
  *
  * Create a filesystem object, to be called by the functions in sufs_inode_ops
- *
- * TAKES:
- * struct inode *dir		the parent dir inode
- * struct dentry *dentry	the dentry
- * umode_t mode			the mode
  */
 static int sufs_create_fs_object(struct inode *dir, struct dentry *dentry,
 				 umode_t mode)
@@ -57,11 +48,6 @@ static int sufs_create_fs_object(struct inode *dir, struct dentry *dentry,
  * sufs_lookup
  *
  * Implement the lookup inode operation
- *
- * TAKES:
- * struct inode *parent_inode	the parent inode
- * struct dentry *child_dentry	the child dentry
- * unsigned int flags		additional flags
  */
 struct dentry *sufs_lookup(struct inode *parent_inode,
 			   struct dentry *child_dentry, unsigned int flags)
@@ -73,11 +59,6 @@ struct dentry *sufs_lookup(struct inode *parent_inode,
  * sufs_create
  *
  * Implement the create inode operation
- *
- * TAKES:
- * struct inode *dir		the parent dir inode
- * struct dentry *dentry	the dentry
- * umode_t mode			the mode
  */
 static int sufs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 		       bool excl)
@@ -89,11 +70,6 @@ static int sufs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
  * sufs_mkdir
  *
  * Implement the mkdir inode operation
- *
- * TAKES:
- * struct inode *dir		the parent dir inode
- * struct dentry *dentry	the dentry
- * umode_t mode			the mode
  */
 static int sufs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
 {
@@ -110,12 +86,6 @@ static struct inode_operations sufs_inode_ops = {
  * sufs_get_inode
  *
  * Create a new inode and return it for a given file (or directory, link, ...)
- *
- * TAKES:
- * struct super_block *sb	superblock which manages the file
- * const struct indoe *dir	directory under which the file is created
- * umode_t mode			type of file
- * dev_t dev			device to be used
  */
 struct inode *sufs_get_inode(struct super_block *sb, const struct inode *dir,
 			     umode_t mode, dev_t dev)
@@ -148,11 +118,6 @@ fail:
  * syfs_fill_super
  *
  * Fill the superblock with the information needed to be valid
- *
- * TAKES:
- * struct super_block *sb	superblock to fill
- * void *data			data?
- * int silent			silent?
  */
 int sufs_fill_super(struct super_block *sb, void *data, int silent)
 {
@@ -196,12 +161,6 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
  * sufs_mount
  *
  * Mount a SuFS filesystem
- *
- * TAKES:
- * struct file_system_type *fs_type	the filesystem tupe
- * int flags				additional flags
- * const_char *dev_name			the device name
- * void *data				data?
  */
 static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
 				 const char *dev_name, void *data)
@@ -221,9 +180,6 @@ static struct dentry *sufs_mount(struct file_system_type *fs_type, int flags,
  * sufs_kill_superblock
  *
  * Kill the superblock and unmount the filesystem. Currently a dummy
- *
- * TAKES:
- * struct super_block *sb	super block to kill
  */
 static void sufs_kill_superblock(struct super_block *sb)
 {
