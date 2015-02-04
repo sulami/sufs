@@ -1,4 +1,5 @@
 obj-m += sufs.o
+sufs-objs := sufs_btree.o
 
 ifdef KERNEL_TREE
 	TREE=$(KERNEL_TREE)
