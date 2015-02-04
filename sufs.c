@@ -38,7 +38,7 @@ const struct file_operations sufs_dir_operations = {
 };
 
 struct dentry *sufs_lookup(struct inode *parent_inode,
-			   struct dentry *child_dentry, uint32_t flags);
+			   struct dentry *child_dentry, unsigned int flags);
 static int sufs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 		       bool excl);
 static int sufs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode);
@@ -68,7 +68,7 @@ static int sufs_create_fs_object(struct inode *dir, struct dentry *dentry,
  * Implement the lookup inode operation
  */
 struct dentry *sufs_lookup(struct inode *parent_inode,
-			   struct dentry *child_dentry, uint32_t flags)
+			   struct dentry *child_dentry, unsigned int flags)
 {
 	return NULL;
 }
