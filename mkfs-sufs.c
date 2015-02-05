@@ -30,6 +30,11 @@ int main(int argc, char *argv[])
 	sb.block_size = SUFS_DEFAULT_BLOCK_SIZE;
 	sb.free_blocks = ~0;
 
+	sb.root_inode.mode = S_IFDIR;
+	sb.root_inode.inode_no = SUFS_ROOT_INODE_NUMBER;
+	sb.root_inode.data_block_number = SUFS_ROOT_INODE_NUMBER;
+	sb.root_inode.dir_children_count = 0;
+
 	retval = write(fd, (char *)&sb, sizeof(sb));
 	if (retval != SUFS_DEFAULT_BLOCK_SIZE)
 		printf(

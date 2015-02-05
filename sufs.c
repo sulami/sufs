@@ -133,7 +133,7 @@ fail:
  */
 int sufs_fill_super(struct super_block *sb, void *data, int silent)
 {
-	struct inode *inode;
+	struct inode *root_inode;
 	struct buffer_head *bh;
 	struct sufs_super_block *sb_disk;
 
@@ -159,9 +159,17 @@ int sufs_fill_super(struct super_block *sb, void *data, int silent)
 		    sb_disk->version, sb_disk->block_size);
 
 	sb->s_magic = SUFS_MAGIC_NR;
-	inode = sufs_get_inode(sb, NULL, S_IFDIR, 0);
-	inode->i_op = &sufs_inode_ops;
-	inode->i_fop = &sufs_dir_operations;
+
+	root_inode = new_indoe(sb);
+	root_inode->i_ino = SUFS_ROOT_INODE_NUMBER;
+	inode_init_owner(root_inode, NULL, S_IFDIR);
+	root_inode->i_sb = sb;
+	root_inode->i_op = &sufs_inode_ops;
+	root_inode->i_fop = &sufs_dir_operations;
+	root_inode->i_atime = root_inode->i_mtime = root_inode->i_ctime
+			    = CURRENT_TIME;
+	root_inode->i_private = &(sb_disk->root_inode);
+
 	sb->s_root = d_make_root(inode);
 	if (!sb->s_root)
 		return -ENOMEM;
